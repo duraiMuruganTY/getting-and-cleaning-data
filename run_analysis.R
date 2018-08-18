@@ -89,7 +89,10 @@ dataSet$activity <- activity_factor
 ##dataSet_new <- cbind(dataSet_new_1,dataSet_new_2)
 ##run_analysis<- (dataSet_new %>%  group_by(subject,activity) %>% summarise_each(funs( mean)))
 
+## Approach 2
+## melting data 
 data1 <- melt(dataSet,(id.vars=c("subject","activity")))
+## calculating mean and renaming features
 data2 <- dcast(data1, subject + activity ~ variable, mean)
 names(data2)[-c(1:2)] <- paste("Average of " , names(data2)[-c(1:2)] )
 
