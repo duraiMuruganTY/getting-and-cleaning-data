@@ -20,3 +20,10 @@ Other than above files, there are 2 files as follows:
 3. Extract only measurements with mean and standard deviation
 4. assign names to the activity
 5. summarize each metrics by subject and activity
+
+# Functions Used
+1. rbind,cbind to combine dataset ny row and column respectively
+2. grep to find the column names with mean/sd
+3. melt to transform the data
+4. dcast to perform average over melted data
+5. write.csv to get the data in csv format
