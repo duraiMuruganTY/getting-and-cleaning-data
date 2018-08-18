@@ -19,5 +19,4 @@ Other than above files, there are 2 files as follows:
 2. Merge train and test
 3. Extract only measurements with mean and standard deviation
 4. assign names to the activity
-5. again using dataset with all metrics to give proper descriptive name 
-6. summarize each metrics by subject and activity
+5. summarize each metrics by subject and activity
