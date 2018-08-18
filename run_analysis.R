@@ -1,4 +1,5 @@
 library(dplyr)
+library(reshape2)
 ## Set working Directory
 
 ## setwd("C:\\Users\\durai.murugan\\Documents\\R")
@@ -46,14 +47,18 @@ subject <- rbind(subject_test,subject_train)
 x <- rbind(x_test,x_train)
 y <- rbind(y_test,y_train)
 
+## Using dataset with all features
+# Step 4 Appropriately labels the data set with descriptive variable names
+names(x) <- features[,2]
+names(subject) <- 'subject'
+names(y) <- 'activity'
+
 # Step 2 Extracts only the measurements on the mean and standard deviation for each measurement
 
 reqCol <- grep("mean()|std()", features[, 2]) 
 dataSet <- x[,reqCol]
-
-names(subject) <- 'subject'
-names(y) <- 'activity'
 activity <- y
+
 dataSet <- cbind(subject,activity, dataSet)
 
 # Step 3 Uses descriptive activity names to name the activities in the data set
@@ -61,41 +66,33 @@ activity_factor <- factor(dataSet$activity)
 levels(activity_factor) <- activity_labels[,2]
 dataSet$activity <- activity_factor
 
+##step 5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subjectx
 
-## Using dataset with all features
-# Step 4 Appropriately labels the data set with descriptive variable names
-colnames(x) <- features[,2]
 
 ##Creating new independent data set
-dataSet_new <- cbind(subject,activity, x)
-dataSet_new$activity <- activity_factor
-
-
+##dataSet_new <- cbind(subject,activity, x)
+##dataSet_new$activity <- activity_factor
 ## I face an issue while summarizing the data. The columns with bandsEnergy substring arenot unique
 ## So I have concatenated X,y and Z to it
-
 ##dataset with only those columns having bandEnergy substring
-indx <- grepl('bandsEnergy',colnames(dataSet_new))
-dataSet_new_1 <- dataSet_new[,indx]
-
+##indx <- grepl('bandsEnergy',colnames(dataSet_new))
+##dataSet_new_1 <- dataSet_new[,indx]
 ## dataset with other columns
-dataSet_new_2 <- dataSet_new[,!indx]
-
+##dataSet_new_2 <- dataSet_new[,!indx]
 ##fetching column names
-issue_index <- colnames(dataSet_new_1)
-
+##issue_index <- colnames(dataSet_new_1)
 ## generating axis
-axis <- rep(c(rep('X',14),rep('Y',14),rep('Z',14)),3)
-
+##axis <- rep(c(rep('X',14),rep('Y',14),rep('Z',14)),3)
 ##concatinating it
-colnames(dataSet_new_1) <- paste0(issue_index,'-',axis)
-
+##colnames(dataSet_new_1) <- paste0(issue_index,'-',axis)
 ##cbind both the datasets 
-dataSet_new <- cbind(dataSet_new_1,dataSet_new_2)
+##dataSet_new <- cbind(dataSet_new_1,dataSet_new_2)
+##run_analysis<- (dataSet_new %>%  group_by(subject,activity) %>% summarise_each(funs( mean)))
 
-##step 5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subjectx
-run_analysis<- (dataSet_new %>%  group_by(subject,activity) %>% summarise_each(funs( mean)))
+data1 <- melt(dataSet,(id.vars=c("subject","activity")))
+data2 <- dcast(data1, subject + activity ~ variable, mean)
+names(data2)[-c(1:2)] <- paste("Average of " , names(data2)[-c(1:2)] )
 
-print(run_analysis)
+print(data2)
 
-write.table(run_analysis, "tidy_data.txt", sep = ",")
+write.csv(data2, "tidy_data.txt", row.names=FALSE)
