@@ -1,7 +1,7 @@
 # getting-and-cleaning-data
 Coursera Peer Assignment on getting and cleaning data
 
-# Available files
+# Files Used
 
 Data files are:
 1. X - that contain's metrics/features without proper descriptive name (561 Column)
