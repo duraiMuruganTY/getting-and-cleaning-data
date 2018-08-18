@@ -97,3 +97,5 @@ dataSet_new <- cbind(dataSet_new_1,dataSet_new_2)
 run_analysis<- (dataSet_new %>%  group_by(subject,activity) %>% summarise_each(funs( mean)))
 
 print(run_analysis)
+
+write.table(run_analysis, "tidy_data.txt", sep = ",")
